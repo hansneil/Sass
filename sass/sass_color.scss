@@ -1,0 +1,153 @@
+/*
+  只定义一次颜色
+  ------
+  使用sass,每次只定义一个颜色值,并保存在变量中
+  优点在于如果需要修改颜色值,只需要修改一处即可
+
+  ------
+  变浅或者加深函数
+  sass使用hsl标准来加深或变浅颜色
+  例如:
+    background-color: #eee;
+    background-color: lighten($color10, 93.5%);
+    这种方式可以快速调整颜色
+    HSL颜色标准
+    60  -- 黄色
+    120 -- 绿色
+    180 -- 青色
+    240 -- 蓝色
+    300 -- 紫红色
+    0   -- 红色
+    hsla(315, 100%, 50%, 1)
+    315: 代表色调
+    315  - [300, 0] 因此是一种介于紫红色和红色之间的颜色
+    100% - 饱和度
+    50%  - 亮度
+    1    - 透明度
+
+  ------
+  标签修改和转换
+  ^ -- 以**开头
+  * -- 包含**
+  $ -- 以**结尾
+
+  compass clearfix功能
+  css清除浮动的三种方法:
+  1. 添加<div class="clear"></div>
+        .clear {
+          clear: both;
+        }
+  2. 对父级元素添加overflow属性
+       .wrapper {
+          overflow: auto;
+       }
+  3. [main] 添加clearfix类
+  而在sass中,只要调用clearfix混合宏即可
+  @include clearfix
+  继续改进:将clearfix用占位符包装,可以进一步扩展clearfix的功能
+*/
+@import "compass";
+@import "partials/variables";
+@import "partials/mixins";
+.wrapper {
+  @include clearfix;
+  //width: 30em;
+  //border: 0.2em solid $color1;
+  //background-color: $color1;
+  //overflow: auto; //设置overflow清除浮动
+}
+.left {
+  background-color: $color2;
+  margin: 0;
+  float: left;
+}
+.right {
+  background-color: $color3;
+  float: right;
+}
+.no-float {
+  background-color: $color6;
+  border: 0.5em solid $color7;
+  float: left;
+}
+/*
+%clearfix {
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+.clearfix {
+  &:before {
+    @extend %clearfix;
+  }
+  &:after{
+    @extend %clearfix;
+    clear: both;
+  }
+}*/
+/*
+  再谈颜色
+  ------
+  混合宏里嵌套混合宏
+  即:
+  @mixin button-links(){
+      @include: border-radius()
+  }
+  为了让代码看起来整洁,可以自定义变量
+  例如使用button-links时
+    @include button-links(complement(lighten($color7, 48%)), complement(lighten($color7, 40%)))
+    可以简化代码:
+    $button-mint: complement(lighten($color7, 48%));
+    $button-mint-hover: complement(lighten($color7, 40%));
+    @include button-links($button-mint, $button-mint-hover);
+
+  ------
+  互补(反色)函数: complement() invert()
+  色调调节函数: adjust-hue($color1, 290deg)
+  饱和函数和去饱和函数: saturate(color, percent) desaturate(color, percent)
+  透明化和渐隐函数: transparentize(color, percent) fade-out()
+  不透明化和渐现函数: opacify() fade-in()
+  灰度函数: grayscale()
+  rgba函数: rgba(color, alpha)
+  混合函数: mix(color1, color2, weight)
+  调色函数: adjust-color(color, hue/saturate/lightness/alpha)
+  遮阴和增亮函数: shade tint
+*/
+.main-link {
+  @include button-links;
+}
+$color8: rgba(32, 255, 153, 0.3);
+%size {
+  width: 10em;
+  height: 5em;
+}
+.square-1 {
+  @extend %size;
+  background-color: adjust_hue($color1, 0deg);
+  background-color: complement($color1);
+  background-color: invert($color1);
+  background-color: desaturate($color1, 50%);
+  background-color: transparentize($color1, .8);
+  background-color: fade-out($color1, .7);
+  background-color: opacify($color8, .2);
+  background-color: grayscale($color1);
+  background-color: rgba($color1, .8);
+}
+.square-2 {
+  @extend %size;
+  background-color: desaturate($color1, 20%);
+  background-color: transparentize($color1, .4);
+  background-color: opacify($color8, .5);
+  background-color: grayscale($color2);
+  background-color: mix($color1, $color2, 70%);
+  background-color: shade($color1, 60%);
+}
+.square-3 {
+  @extend %size;
+  background-color: desaturate($color1, 90%);
+  background-color: transparentize($color1, .0);
+  background-color: opacify($color8, .7);
+  background-color: grayscale($color6);
+  background-color: tint($color1, 60%);
+}

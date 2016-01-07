@@ -1,0 +1,163 @@
+@charset "UTF-8";
+/*
+  只定义一次颜色
+  ------
+  使用sass,每次只定义一个颜色值,并保存在变量中
+  优点在于如果需要修改颜色值,只需要修改一处即可
+
+  ------
+  变浅或者加深函数
+  sass使用hsl标准来加深或变浅颜色
+  例如:
+    background-color: #eee;
+    background-color: lighten($color10, 93.5%);
+    这种方式可以快速调整颜色
+    HSL颜色标准
+    60  -- 黄色
+    120 -- 绿色
+    180 -- 青色
+    240 -- 蓝色
+    300 -- 紫红色
+    0   -- 红色
+    hsla(315, 100%, 50%, 1)
+    315: 代表色调
+    315  - [300, 0] 因此是一种介于紫红色和红色之间的颜色
+    100% - 饱和度
+    50%  - 亮度
+    1    - 透明度
+
+  ------
+  标签修改和转换
+  ^ -- 以**开头
+  * -- 包含**
+  $ -- 以**结尾
+
+  compass clearfix功能
+  css清除浮动的三种方法:
+  1. 添加<div class="clear"></div>
+        .clear {
+          clear: both;
+        }
+  2. 对父级元素添加overflow属性
+       .wrapper {
+          overflow: auto;
+       }
+  3. [main] 添加clearfix类
+  而在sass中,只要调用clearfix混合宏即可
+  @include clearfix
+  继续改进:将clearfix用占位符包装,可以进一步扩展clearfix的功能
+*/
+.wrapper {
+  overflow: hidden;
+  *zoom: 1;
+}
+
+.left {
+  background-color: #ff1066;
+  margin: 0;
+  float: left;
+}
+
+.right {
+  background-color: #f2f200;
+  float: right;
+}
+
+.no-float {
+  background-color: #30bbff;
+  border: 0.5em solid #b37fe6;
+  float: left;
+}
+
+/*
+%clearfix {
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+.clearfix {
+  &:before {
+    @extend %clearfix;
+  }
+  &:after{
+    @extend %clearfix;
+    clear: both;
+  }
+}*/
+/*
+  再谈颜色
+  ------
+  混合宏里嵌套混合宏
+  即:
+  @mixin button-links(){
+      @include: border-radius()
+  }
+  为了让代码看起来整洁,可以自定义变量
+  例如使用button-links时
+    @include button-links(complement(lighten($color7, 48%)), complement(lighten($color7, 40%)))
+    可以简化代码:
+    $button-mint: complement(lighten($color7, 48%));
+    $button-mint-hover: complement(lighten($color7, 40%));
+    @include button-links($button-mint, $button-mint-hover);
+
+  ------
+  互补(反色)函数: complement() invert()
+  色调调节函数: adjust-hue($color1, 290deg)
+  饱和函数和去饱和函数: saturate(color, percent) desaturate(color, percent)
+  透明化和渐隐函数: transparentize(color, percent) fade-out()
+  不透明化和渐现函数: opacify() fade-in()
+  灰度函数: grayscale()
+  rgba函数: rgba(color, alpha)
+  混合函数: mix(color1, color2, weight)
+  调色函数: adjust-color(color, hue/saturate/lightness/alpha)
+  遮阴和增亮函数: shade tint
+*/
+.main-link {
+  border: 1px solid #8a3bd9;
+  padding: .3em .6em;
+  margin-left: .7em;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  text-shadow: 0 1px 2px #b37fe6;
+  color: white;
+  background-color: #9a54de;
+}
+.main-link:hover {
+  background-color: #8d3fda;
+}
+
+.square-1, .square-2, .square-3 {
+  width: 10em;
+  height: 5em;
+}
+
+.square-1 {
+  background-color: #20ff99;
+  background-color: #ff2086;
+  background-color: #df0066;
+  background-color: #58c794;
+  background-color: rgba(32, 255, 153, 0.2);
+  background-color: rgba(32, 255, 153, 0.3);
+  background-color: rgba(32, 255, 153, 0.5);
+  background-color: #909090;
+  background-color: rgba(32, 255, 153, 0.8);
+}
+
+.square-2 {
+  background-color: #36e997;
+  background-color: rgba(32, 255, 153, 0.6);
+  background-color: rgba(32, 255, 153, 0.8);
+  background-color: #888888;
+  background-color: #63b78a;
+  background-color: #0d663d;
+}
+
+.square-3 {
+  background-color: #849b90;
+  background-color: #20ff99;
+  background-color: #20ff99;
+  background-color: #989898;
+  background-color: #a6ffd6;
+}
