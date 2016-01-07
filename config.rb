@@ -1,5 +1,7 @@
 require 'compass/import-once/activate'
 # Require any additional compass plugins here.
+# 配置工程所需的插件
+require 'susy'
 
 # Set this to the root of your project when deployed:
 http_path = "/"
@@ -7,7 +9,7 @@ css_dir = "css"
 sass_dir = "sass"
 images_dir = "img"
 javascripts_dir = "js"
-fonts_dir = "css/fonts/sansation/web_fonts/sansation_italic_macroman"
+fonts_dir = "css/fonts"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed

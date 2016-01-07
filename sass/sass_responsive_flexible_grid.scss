@@ -1,0 +1,193 @@
+/*
+  网格系统
+  相当于bootstrap的col-lg-2等
+  sass使用的是真正灵活的网格系统
+
+  关于Susy
+  网格系统,使用简便,代码简洁,操作灵活
+  Susy十分稳定,和sass/compass工程完美融合
+  其他网格系统: Zen Flex
+
+  Susy:
+    主要用来处理水平轴上的宽度和排版问题
+    对于纵向排版,compass有自身的纵向排版工具
+
+  Susy工程变量
+  ------
+  用于定义网格的设置,使用susy实现响应式布局的任何尺寸
+*/
+@import "susyone";
+@import "partials/layout";
+$total-columns: 12; //一个12列的网格系统
+$column-width: 5em; //每一列5em宽
+$gutter-width: 1em; //每列间隙1em
+$grid-padding: $gutter-width;
+$M: 50em;
+$L: 75em;
+
+/*
+  为网格系统定义背景
+  -----
+  背景即为网格系统的容器
+  @include container
+  设置网格背景
+  @include susy-grid-background
+*/
+[class ^= "inner"] {
+  @include container;
+  @include susy-grid-background;
+  @include border-box-sizing;
+}
+/*
+  为susy设置border-box属性,这将影响内边距,边框和网格列的工作方式
+*/
+
+/*
+  创建移动响应式网格系统
+  用susy设置断点,可以设置一些变量来存储断点宽度
+  $M: 表示中等尺寸的视区宽度
+  $L: 表示大屏幕的视区宽度
+  例如:
+    $M: 47em;
+    $L: 75em;
+    实际上创建了三种断点布局: 初始可访问布局, 47em断点布局, 75em断点布局
+  susy有一个内置的混合宏,at-breakpoint,可以创建media queries
+  span-columns: 表示一个元素应该跨越多少个列
+*/
+nav[role = "navigation"] {
+  @include at-breakpoint($M) {
+    @include span-columns(3, 12);
+  }
+}
+.main-content {
+  @include at-breakpoint($M) {
+    @include prefix(1, 12);
+    @include span-columns(9 omega, 12);
+  }
+}
+/*
+  取消对旧版ie的支持:
+  $legacy-support-for-ie: false;
+  $legacy-support-for-ie6: $legacy-support-for-ie;
+  $legacy-support-for-ie7: $legacy-support-for-ie;
+*/
+
+/*
+  创建流式网格系统
+  ------
+  默认susy创建的是弹性网格系统,也可以变成完全流动性的
+  可以在现有的网格设置下添加相应变量
+  $container-style: fluid;
+
+  创建固定式网格系统
+  ------
+  $container-style: static
+
+  使用susy网格帮助工具
+  ------
+  解决常见的布局问题
+  prefix suffix 和 pad -- 用于在列前列后添加内边距
+  --
+  prefix
+  .main-content {
+    @include prefix(1,12); 在主要内容前添加一列
+    @include span-columns(9 omega, 12); //参数1表示主要内容的列数,参数2表示背景列数
+  }
+  ⚠⚠⚠:如果不使用border-box模式,这时需要修改span-columns(8 omega, 12)
+        因为此时如果没有指定border-box模式, 指定的width代表内容宽度,而不包含内边距
+  --
+  suffix
+  可以获得和prefix类似的效果
+  如果现在去掉main-content中的prefix, 在navigation中添加suffix
+  即:
+    nav[role = "navigation"] {
+      @include at-breakpoint($M) {
+        @include suffix(1,12);        |
+        @include span-columns(3, 12); |___由于这里suffix用在navigation区域,所以减少的内容列数在navigation处
+      }
+    }
+    .main-content {
+      @include at-breakpoint($M) {
+        @include span-columns(9 omega, 12);
+      }
+    }
+
+  --
+  pad
+  当然也可以在两边都空出一列, 同时添加内边距
+  即:
+    nav[role = "navigation"] {
+      @include at-breakpoint($M) {
+        @include span-columns(3, 12);
+      }
+    }
+    .main-content {
+      @include at-breakpoint($M) {
+        @include pad(1, 1, 12);
+        @include span-columns(9 omega, 12);
+      }
+    }
+*/
+
+/*
+  pre post squish push pull
+  -------------------------------
+  [一系列管理外边距的工具]
+  --
+  pre: 在元素前面添加一列外边距: @include pre(1)
+  此时需要修改 span-columns的值,
+    .main-content {
+      @include pre(1);
+      @include span-columns(8 omega, 12); //这里使用omega,由于主要内容是网格系统的最后一列
+    }
+  --
+  post: 在元素后面添加三列外边距: @include post(3)
+  --
+  squish: 在元素的两侧添加外边距,和pad类似 @include squish(2,2,12)
+  --
+  push: 功能和pre基本一样,可以交替使用
+  pull: 略有不同,功能是在元素前面添加负外边距
+*/
+
+/*
+  网格内嵌套网格, 有了susy变得简单
+  --------
+  可以使用susy这个特性,给主要内容区的外链部分添加网格系统
+  具体可以这么做:
+      @include with-grid-settings(4, 8em, 1.5em, 0){ [$total-columns $column-width $gutter-width $grid-padding]
+        .purchase-links-wrapper {
+          @include container;   //将wrapper元素作为容器
+        }
+        .purchase-link {
+          @include span-columns(1); //将每个子链接跨越一列,总共有4个元素,跨越全部4列
+          @include nth-omega(4n);
+        }
+      }
+
+  nth-omega[主要介绍]
+  ------
+  是omega设置外边距的快捷方式
+  由于上例中有4项,所以设置4n告诉最后一项是第4项,并且该项有omega样式
+  所以 nth-omega(4n) 每隔4项选取一个
+  而nth-omega默认设置为最后一项,所以这里使用 @include nth-omega;效果是一样的
+*/
+
+/*
+  子像素的四舍五入问题
+  ------
+  safari在计算像素时会进行四舍五入
+  虽然网格的外围是以em为单位的,但内列宽度是由百分比指定的
+
+  容器相对布局法 isolate-grid
+  ------
+  可以这样实现
+  [role = "navigation"] {
+    @include span-columns(3, 12);
+  }
+  .grid-item-wrapper {
+    @include span-columns(9 omega, 12);
+  }
+  .grid-item {
+    @include isolate-grid(1, 9);
+  }
+*/
