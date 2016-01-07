@@ -1,0 +1,71 @@
+/*!
+  css是一种声明语言,而非编程语言
+  sass 和 less 是一种元语言,css的预处理器
+  sass和compass提供类似编程语言的语法
+  sass: 能够让你更快,更容易地编写css代码, 并且更容易维护
+
+  sass\less\stylus的区别:
+      详见: http://css-tricks.com/sass-vs-less
+      sass和compass的优点:
+      1.使用变量:每个值只需要定义一次
+        例如: $red: #ff0b13;
+             使用时:
+                .i-want-to-be-red {
+                  color: $red
+                }
+      2.自动转换的RGBA颜色值
+        sass颜色函数支持将十六进制值转换为RGBA值
+        例如: .color-me-good {
+                color: $red;
+                color: rgba($red, 0.9);
+             }
+      3.忘记浏览器前缀
+        compass完全可以解决浏览器前缀问题
+        比如应用border-radius:
+        .rounded {
+          @include border-radius(4px);
+        }
+      4.嵌套规则
+        先来看例子
+        nav {
+          a {
+            color: $red;
+            &:hover {
+              color: $green;
+            }
+            &:visited {
+              color: $blue
+            }
+          }
+        }
+        这样就给nav下的所有a标签赋予了hover和visited状态,这样做可以将相关的代码都放在一起
+      ⚠: css选择器切忌写的过于具体,尽量使用达到相同效果的最简形式
+          因此,尽管在sass中可以使用嵌套,但不一定所有时候都要用
+      5.media queries变得更加简单
+        除非有很好的理由,不然所有的网站都应该设计成响应式的网站
+        有了sass,这样的样式变得非常简单
+        h1 {
+          @include MQ(XS) {
+            font-size: 1.1em;
+          }
+          @include MQ(S) {
+            font-size: 1em;
+          }
+          @include MQ(M) {
+            font-size: 0.9em;
+          }
+        }
+      6.自动压缩css从而实现快速建站
+        sass可以将css编译成多种格式,其中一种便是压缩格式
+*/
+
+/*
+  什么是sass
+  scss相对于sass原始语法有些冗余,但和css非常相似
+
+  什么是compass
+  compass是一套开源的css开发框架
+
+  创建sass和compass工程
+  compass create my-project
+*/

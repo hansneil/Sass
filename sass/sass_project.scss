@@ -1,0 +1,73 @@
+/*!
+  关于config.rb
+  config.rb
+  ---------------------------------------
+  # Require any additional compass plugins here.
+  添加需要的插件,相应的语法 require "susy"
+
+  # Set this to the root of your project when deployed
+  为工程资源设定名称和路径
+  这些路径都是相对于html的路径,因此只要将html保存在根目录下即可
+
+  # You can select your preferred output style here
+  设定css输出样式
+  嵌套输出: nested
+  紧密输出: compact 单行
+  压缩输出: compressed 在最后投入生产时使用该模式
+
+  # To disable debugging comments that display the original location of your selectors
+  去掉注释,保留样式
+  设置line_comment = false
+
+  如果想要压缩css,但想保留重要的注释,
+  注释用 /*! 可以保留注释 * / 而非 /*  * /
+
+  # To enable relative paths to assets via compass helper functions
+  打开相对资源路径功能
+  设置 relative_assets = true
+  这样设置之后,可以很方便地请求资源
+  比如: background-image: url('../img/image.jpg')
+       可用 background-image: image-url('image.jpg')
+*/
+h1 {
+  color: green;
+  &:hover {
+    color: aqua;
+  }
+  &:active {
+    color: aquamarine;
+  }
+}
+/*!
+  创建和使用模块文件
+  对于建站来说: HTTP请求数目越少,文件传送越快,因此通过import引入多个css文件并不是一种最佳实践
+              目前浏览器限制每次最多6个HTTP请求,但HTTP2和SPDY协议将放宽这个限制
+  sass提供可维护的生产性代码
+  补充内容: 标准化样式[http://necolas.github.com/normalize.css] + 重置样式
+  ----
+  模块文件: 必须有前缀 '_', 不然在编译时会生成css文件
+  ----
+  导入模块文件
+  @import "compass"   导入compass,可以使用compass的强大功能
+  @import "partials/normalize"
+  ----
+  导入变量文件
+  书写变量: $variable-name: value;
+  ----
+  sass注释格式
+  标准的注释格式 /* 这是一个普通注释 * /
+  单行注释: //
+  分割sass主要模块
+  // ====================================
+  // 这是一个主分区
+  // ====================================
+
+  // 这是一个次分区
+  // ====================================
+*/
+/*@import "compass";*/
+@import "partials/variables";
+@import "partials/normalize";
+h2 {
+  color: $red;
+}

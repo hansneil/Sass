@@ -1,0 +1,8 @@
+# webstorm
+**/.idea/
+
+# mac
+.DS_Store
+
+# sass_caches
+**/.sass-cache
