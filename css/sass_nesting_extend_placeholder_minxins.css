@@ -1,73 +1,14 @@
 @charset "UTF-8";
-/*!
-  关于config.rb
-  config.rb
-  ---------------------------------------
-  # Require any additional compass plugins here.
-  添加需要的插件,相应的语法 require "susy"
-
-  # Set this to the root of your project when deployed
-  为工程资源设定名称和路径
-  这些路径都是相对于html的路径,因此只要将html保存在根目录下即可
-
-  # You can select your preferred output style here
-  设定css输出样式
-  嵌套输出: nested
-  紧密输出: compact 单行
-  压缩输出: compressed 在最后投入生产时使用该模式
-
-  # To disable debugging comments that display the original location of your selectors
-  去掉注释,保留样式
-  设置line_comment = false
-
-  如果想要压缩css,但想保留重要的注释,
-  注释用 /*! 可以保留注释 * / 而非 /*  * /
-
-  # To enable relative paths to assets via compass helper functions
-  打开相对资源路径功能
-  设置 relative_assets = true
-  这样设置之后,可以很方便地请求资源
-  比如: background-image: url('../img/image.jpg')
-       可用 background-image: image-url('image.jpg')
+/*
+  sass和compass给网站添加样式
 */
-h1 {
-  color: green;
+@font-face {
+  font-family: 'sansationitalic';
+  src: url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.eot?1452098376');
+  src: url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.eot?&1452098376#iefix') format("embedded-opentype"), url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.woff?1452098376') format("woff"), url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.ttf?1452098376') format("truetype"), url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.svg?1452098376#sansationitalic') format("svg");
+  font-weight: normal;
+  font-style: normal;
 }
-h1:hover {
-  color: aqua;
-}
-h1:active {
-  color: aquamarine;
-}
-
-/*!
-  创建和使用模块文件
-  对于建站来说: HTTP请求数目越少,文件传送越快,因此通过import引入多个css文件并不是一种最佳实践
-              目前浏览器限制每次最多6个HTTP请求,但HTTP2和SPDY协议将放宽这个限制
-  sass提供可维护的生产性代码
-  补充内容: 标准化样式[http://necolas.github.com/normalize.css] + 重置样式
-  ----
-  模块文件: 必须有前缀 '_', 不然在编译时会生成css文件
-  ----
-  导入模块文件
-  @import "compass"   导入compass,可以使用compass的强大功能
-  @import "partials/normalize"
-  ----
-  导入变量文件
-  书写变量: $variable-name: value;
-  ----
-  sass注释格式
-  标准的注释格式 /* 这是一个普通注释 * /
-  单行注释: //
-  分割sass主要模块
-  // ====================================
-  // 这是一个主分区
-  // ====================================
-
-  // 这是一个次分区
-  // ====================================
-*/
-/*@import "compass";*/
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 /**
  * 1. Set default font family to sans-serif.
@@ -466,6 +407,269 @@ th {
   padding: 0;
 }
 
-h2 {
+body {
+  font-size: 1em;
+  line-height: 1.4;
+  font-family: "sansationitalic";
+}
+.no-fontface body {
+  font-size: 1.05em;
+}
+
+::-moz-selection {
+  background-color: #20ff99;
+  text-shadow: none;
+}
+
+::selection {
+  background: #20ff99;
+  text-shadow: none;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 1200px;
+  margin: auto;
+}
+
+header[role="banner"], footer[role="contentinfo"] {
+  width: 100%;
+  display: block;
+}
+
+nav[role="navigation"] {
+  width: 25%;
+  float: left;
+}
+
+.main-content {
+  width: 70%;
+  float: right;
+}
+
+footer[role="contentinfo"] {
+  clear: both;
+}
+
+/*
+  嵌套
+  ------
+  在大括号结束前可以嵌套另外一段代码
+  a {
+    color: $color7;
+    &:hover, &:focus {
+      color: $color5;
+    }
+    &:visited, &:active {
+      color: $color4
+    }
+  }
+  通过嵌套大致反应了html的层次结构
+  可以使用各种方式嵌套样式, 如类,ID,伪类,这些都是被sass支持的
+  例如:
+    .chapter-summary {
+      border-bottom: 2px dotted;
+      &:last-child {
+        border: none;
+      }
+    }
+
+  父级选择器
+  ⚠:1.需要用sass进行嵌套的伪选择器必须在前面加上: '&:'
+       在sass中, &指代父级选择器.
+       也就是说, &:last-child == .chapter-summary:last-child
+
+     2.& 的其他用法: 嵌套相关选择器
+       .main {
+          .content {
+            width: 70%;
+          }
+          .content & {
+            width: 100%;
+          }
+          .content & {
+            .two & {
+              color: pink;
+            }
+          }
+       }
+       即: 用父级选择器进行嵌套时,有效地将选择器反向进行了调换
+     3.& 用于级联选择器
+      .select-one {
+        & .select-two {
+          color: $color2;
+        }
+      }
+
+     4.使用父级选择器轻松添加Modernizr样式
+     Modernizr: 当css需要分支样式时,使用它可以节省大量的时间
+                帮助我们检测浏览器的能力
+                是专门为css3和html5开发的功能检测库,使得开发者可以在支持功能的浏览器上充分利用新特性进行开发
+                当Modernizr运行时,会将no-js修改为js,会检测所有的特性,如果该特性不被某个浏览器支持,就会在前面加上'no-'前缀
+
+     5.过度嵌套的危险
+     嵌套尽量不要超过三层
+
+     6.嵌套命名空间
+     .nest-namespace {
+        border {
+          top:
+          right:
+          bottom:
+          left:
+        }
+     }
+*/
+a {
+  color: #b37fe6;
+}
+a:hover, a:focus {
+  color: #e68722;
+}
+a:visited, a:active {
+  color: #20ffe4;
+}
+
+.chapter-summary {
+  border-bottom: 2px dotted;
+}
+.chapter-summary:last-child {
+  border: none;
+}
+
+.main .content {
+  width: 70%;
+}
+.content .main {
+  width: 100%;
+}
+.two .content .main {
+  color: pink;
+}
+
+.select-one .select-two {
   color: #ff1066;
+}
+
+/*
+  使用@extend扩展现有代码
+  ------
+  如果好几个元素共享相同的属性,便可用@extend
+  例子,各种情况下的提示对话框
+  .box {
+    padding: 2em;
+    color: $color5;
+    background-color: $color6;
+  }
+  .warning-box {
+    @extend .box;
+    border: 2px dotted $color1;
+  }
+  .success-box {
+    @extend .box;
+    border: 2px dotted $color2;
+  }
+  .info-box {
+    @extend .box;
+    border: 2px dotted $color3;
+  }
+*/
+.box, .warning-box, .success-box, .info-box {
+  padding: 2em;
+  color: #e68722;
+  background-color: #30bbff;
+}
+
+.warning-box {
+  border: 2px dotted #20ff99;
+}
+
+.success-box {
+  border: 2px dotted #ff1066;
+}
+
+.info-box {
+  border: 2px dotted #f2f200;
+}
+
+/*
+  使用占位符选择器来扩展需要的样式
+  ------
+  %box {
+    padding: 2em;
+    color: $color5;
+    background-color: $color6;
+  }
+  .warning-box {
+    @extend %box;
+    border: 2px dotted $color1;
+  }
+  .success-box {
+    @extend %box;
+    border: 2px dotted $color2;
+  }
+  .info-box {
+    @extend %box;
+    border: 2px dotted $color3;
+  }
+  使用占位符不会像.box那样产生冗余的代码,只是用于临时占位而已,不会产生冗余的代码
+*/
+.warning-box, .success-box, .info-box {
+  padding: 2em;
+  color: #e68722;
+  background-color: #30bbff;
+}
+
+.warning-box {
+  border: 2px dotted #20ff99;
+}
+
+.success-box {
+  border: 2px dotted #ff1066;
+}
+
+.info-box {
+  border: 2px dotted #f2f200;
+}
+
+/*
+  混合宏
+  ------
+  @extend 和 占位符 通常不会生成可扩展的代码,但混合宏可以
+  compass提供了数百种的混合宏,轻松解决跨浏览器的兼容性问题
+  border-box定义宽度时,包括外边框+内容+内边距
+  content-box定义宽度时,仅仅指代内容宽度
+
+  添加混合宏_mixins.scss时要注意:
+      添加在_variables.scss后面,保证所有的变量都可以被混合宏使用
+      添加在其他文件之前,保证所有的宏模式都可以被后面的文件使用
+      @mixin bs($bs-type) {
+        -webkit-box-sizing: $bs-type;
+        -moz-box-sizing: $bs-type;
+        box-sizing: $bs-type;
+      }
+
+      * {
+        @include bs(border-box);
+      }
+
+      设定宏的默认值
+      @mixin bs($bs-type: $defined-bs-type) {
+        -webkit-box-sizing: $bs-type;
+        -moz-box-sizing: $bs-type;
+        box-sizing: $bs-type;
+      }
+
+      $defined-bs-type: border-box;
+      $defined-bs-type: sausages !default;
+*/
+* {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }

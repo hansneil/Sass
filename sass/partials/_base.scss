@@ -1,0 +1,16 @@
+body {
+  font-size: 1em;
+  line-height: 1.4;
+  font-family: "sansationitalic";
+  .no-fontface &{
+    font-size: 1.05em;
+  }
+}
+::-moz-selection {
+  background-color: $color1;
+  text-shadow: none;
+}
+::selection { //::selection css3选择器,指示被选中的内容添加一个背景色
+  background: $color1;
+  text-shadow: none;
+}

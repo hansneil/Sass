@@ -1,4 +1,5 @@
-﻿/*!
+@charset "UTF-8";
+/*!
   css是一种声明语言,而非编程语言
   sass 和 less 是一种元语言,css的预处理器
   sass和compass提供类似编程语言的语法
@@ -57,4 +58,14 @@
         }
       6.自动压缩css从而实现快速建站
         sass可以将css编译成多种格式,其中一种便是压缩格式
+*/
+/*
+  什么是sass
+  scss相对于sass原始语法有些冗余,但和css非常相似
+
+  什么是compass
+  compass是一套开源的css开发框架
+
+  创建sass和compass工程
+  compass create my-project
 */

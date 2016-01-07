@@ -1,0 +1,226 @@
+/*
+  sass和compass给网站添加样式
+*/
+@import "compass";
+@import "partials/variables";
+@import "partials/mixins";
+@import "partials/fonts";
+@import "partials/normalize";
+@import "partials/base";
+@import "partials/layout";
+@import "partials/modules";
+/*
+  嵌套
+  ------
+  在大括号结束前可以嵌套另外一段代码
+  a {
+    color: $color7;
+    &:hover, &:focus {
+      color: $color5;
+    }
+    &:visited, &:active {
+      color: $color4
+    }
+  }
+  通过嵌套大致反应了html的层次结构
+  可以使用各种方式嵌套样式, 如类,ID,伪类,这些都是被sass支持的
+  例如:
+    .chapter-summary {
+      border-bottom: 2px dotted;
+      &:last-child {
+        border: none;
+      }
+    }
+
+  父级选择器
+  ⚠:1.需要用sass进行嵌套的伪选择器必须在前面加上: '&:'
+       在sass中, &指代父级选择器.
+       也就是说, &:last-child == .chapter-summary:last-child
+
+     2.& 的其他用法: 嵌套相关选择器
+       .main {
+          .content {
+            width: 70%;
+          }
+          .content & {
+            width: 100%;
+          }
+          .content & {
+            .two & {
+              color: pink;
+            }
+          }
+       }
+       即: 用父级选择器进行嵌套时,有效地将选择器反向进行了调换
+     3.& 用于级联选择器
+      .select-one {
+        & .select-two {
+          color: $color2;
+        }
+      }
+
+     4.使用父级选择器轻松添加Modernizr样式
+     Modernizr: 当css需要分支样式时,使用它可以节省大量的时间
+                帮助我们检测浏览器的能力
+                是专门为css3和html5开发的功能检测库,使得开发者可以在支持功能的浏览器上充分利用新特性进行开发
+                当Modernizr运行时,会将no-js修改为js,会检测所有的特性,如果该特性不被某个浏览器支持,就会在前面加上'no-'前缀
+
+     5.过度嵌套的危险
+     嵌套尽量不要超过三层
+
+     6.嵌套命名空间
+     .nest-namespace {
+        border {
+          top:
+          right:
+          bottom:
+          left:
+        }
+     }
+*/
+a {
+  color: $color7;
+  &:hover, &:focus {
+    color: $color5;
+  }
+  &:visited, &:active {
+    color: $color4
+  }
+}
+.chapter-summary {
+  border-bottom: 2px dotted;
+  &:last-child {
+    border: none;
+  }
+}
+.main {
+  .content {
+    width: 70%;
+  }
+  .content & {
+    width: 100%;
+  }
+  .content & {
+    .two & {
+      color: pink;
+    }
+  }
+}
+.select-one {
+  & .select-two {
+    color: $color2;
+  }
+}
+/*
+  使用@extend扩展现有代码
+  ------
+  如果好几个元素共享相同的属性,便可用@extend
+  例子,各种情况下的提示对话框
+  .box {
+    padding: 2em;
+    color: $color5;
+    background-color: $color6;
+  }
+  .warning-box {
+    @extend .box;
+    border: 2px dotted $color1;
+  }
+  .success-box {
+    @extend .box;
+    border: 2px dotted $color2;
+  }
+  .info-box {
+    @extend .box;
+    border: 2px dotted $color3;
+  }
+*/
+.box {
+  padding: 2em;
+  color: $color5;
+  background-color: $color6;
+}
+.warning-box {
+  @extend .box;
+  border: 2px dotted $color1;
+}
+.success-box {
+  @extend .box;
+  border: 2px dotted $color2;
+}
+.info-box {
+  @extend .box;
+  border: 2px dotted $color3;
+}
+/*
+  使用占位符选择器来扩展需要的样式
+  ------
+  %box {
+    padding: 2em;
+    color: $color5;
+    background-color: $color6;
+  }
+  .warning-box {
+    @extend %box;
+    border: 2px dotted $color1;
+  }
+  .success-box {
+    @extend %box;
+    border: 2px dotted $color2;
+  }
+  .info-box {
+    @extend %box;
+    border: 2px dotted $color3;
+  }
+  使用占位符不会像.box那样产生冗余的代码,只是用于临时占位而已,不会产生冗余的代码
+*/
+%box {
+  padding: 2em;
+  color: $color5;
+  background-color: $color6;
+}
+.warning-box {
+  @extend %box;
+  border: 2px dotted $color1;
+}
+.success-box {
+  @extend %box;
+  border: 2px dotted $color2;
+}
+.info-box {
+  @extend %box;
+  border: 2px dotted $color3;
+}
+/*
+  混合宏
+  ------
+  @extend 和 占位符 通常不会生成可扩展的代码,但混合宏可以
+  compass提供了数百种的混合宏,轻松解决跨浏览器的兼容性问题
+  border-box定义宽度时,包括外边框+内容+内边距
+  content-box定义宽度时,仅仅指代内容宽度
+
+  添加混合宏_mixins.scss时要注意:
+      添加在_variables.scss后面,保证所有的变量都可以被混合宏使用
+      添加在其他文件之前,保证所有的宏模式都可以被后面的文件使用
+      @mixin bs($bs-type) {
+        -webkit-box-sizing: $bs-type;
+        -moz-box-sizing: $bs-type;
+        box-sizing: $bs-type;
+      }
+
+      * {
+        @include bs(border-box);
+      }
+
+      设定宏的默认值
+      @mixin bs($bs-type: $defined-bs-type) {
+        -webkit-box-sizing: $bs-type;
+        -moz-box-sizing: $bs-type;
+        box-sizing: $bs-type;
+      }
+
+      $defined-bs-type: border-box;
+      $defined-bs-type: sausages !default;
+*/
+* {
+  @include bs(content-box);
+}
