@@ -1,0 +1,157 @@
+@charset "UTF-8";
+/*
+  交互式设计的核心
+  ----
+  流体布局,流体元素,media queries
+
+  交互中的media queries
+  ----
+  通常指的是最小和最大的宽度值
+  断点: 即改变浏览器窗口大小时,布局出现错乱的那个点
+*/
+/*
+  sass的media queries
+  ----
+  media queries: 可用于视区高度/宽度, 设备高度/宽度, 重力转向
+                 视区高宽比, 设备高宽比, 颜色, 颜色指数,
+                 单色图像, 解析度, 扫描, 网络
+                 [交互式网站搭建时, 主要考虑视区宽度]
+  ----
+  使用media query模块文件分离media query样式
+  即: 将media query部分代码分离,之后引入
+      @import "partials/media-queries"
+
+  ----
+  sass的行内media query
+  例子:
+      .style {
+        color: $color1;
+        @include MQ(Splus) {
+          width: 80%
+        }
+        @include MQ(Mplus) {
+          width: 70%
+        }
+        @include MQ(Lplus) {
+          width: 60%
+        }
+      }
+
+  扩展: media queries
+       媒体查询: 根据不同的媒体查询表达式来检查某个媒体是否符合条件
+       一个简单的例子:
+          <link rel="stylesheet" href="css/style.css" media="screen and (max-width: 600px)" />
+          |__表示,当屏幕宽度小于600px时,使用style.css
+             这里, screen 表示媒体类型 and/not/only 表示关键词 (max-width: 600px) 表示媒体特性
+
+             媒体类型
+             --
+             all aural[语音和音频合成器] braille[触觉回馈设备] embossed[盲人用点字法打印机]
+             handheld[手持设备] print[打印机] projection[方案展示,ppt] screen[电脑显示器]
+             tty[电传打字机] tv[电视类型设备]
+
+             引入媒体类型的方法
+             1. link方法引入
+                比如: <link rel="stylesheet" href="css/style.css" media="media" />
+             2. xml方法引入
+                比如: <?xml-stylesheet rel="stylesheet" href="css/style.css" media="screen" />
+             3. @import方法引入
+                比如: @import url("css/print.css") print; [在stylesheet中]
+                     @import url("css/style.css") all [在<style></style>中]
+             4. @media方法引入
+                比如: @media screen and ...
+             [建议: 使用第一种和第四种]
+
+             媒体特性
+             --
+             media queries = media type + 符合条件的css样式
+             常见的特性:  视区高度/宽度, 设备高度/宽度, 重力转向
+                        视区高宽比, 设备高宽比, 颜色, 颜色指数,
+                        单色图像, 解析度, 扫描, 网络
+
+             使用方法
+             --
+             最大宽度 max-width 最小宽度 min-width
+             多个media queries (max-width) and (min-width)
+             设备屏幕输出宽度 (max-device-width)
+             iphone4 -webkit-min-device-width
+             ipad 横向: (orientation: landscape)
+                  纵向: (orientation: portrait)
+             android (max-device-width)
+
+             --
+             not关键字 排除某个媒体类型, 比如 not print and (max-width ...)
+             only关键字 某种特定媒体类型, 比如 only screen and (max-width ...)
+
+             --
+             , 表示两个媒体查询表达式并列
+*/
+.style {
+  color: #20ff99;
+}
+@media only screen and (min-width: 30em) {
+  .style {
+    width: 80%;
+  }
+}
+@media only screen and (min-width: 43em) {
+  .style {
+    width: 70%;
+  }
+}
+@media only screen and (min-width: 57em) {
+  .style {
+    width: 60%;
+  }
+}
+
+/*
+  创建mixin混合宏轻松处理media queries
+  ----
+
+  将断点定义为变量
+  --
+  $XS: 18em; //288px
+  $S: 30em; //480px
+  $M: 43em; //688px
+  $L: 57em; //912px
+
+  接下来是混合宏的代码
+  --
+  @mixin MQ($canvas) {
+    @if $canvas == XS {
+      @media only screen and (min-width: $XS) and (max-width: $S-1) {
+        //content
+      }
+    }
+    @else if $canvas == S {
+      @media only screen and (min-width: $S) and (max-width: $L-1) {
+        //content
+      }
+    }
+    @else if $canvas == XSplus {
+      @media only screen and (min-width: $XS) {
+        //content
+      }
+    }
+  }
+*/
+@media only screen and (max-width: 30em) {
+  .main-content {
+    padding: 0 1em;
+  }
+}
+.main-content p {
+  line-height: 1.7em;
+}
+@media only screen and (max-width: 30em) {
+  .main-content p {
+    font-size: 1.1em;
+  }
+}
+
+/*
+  实际工程中行内media queries 和 集合media queries
+  ----
+  没有过多的差别
+*/

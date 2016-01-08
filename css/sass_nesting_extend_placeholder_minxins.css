@@ -4,8 +4,8 @@
 */
 @font-face {
   font-family: 'sansationitalic';
-  src: url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.eot?1452098376');
-  src: url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.eot?&1452098376#iefix') format("embedded-opentype"), url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.woff?1452098376') format("woff"), url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.ttf?1452098376') format("truetype"), url('/css/fonts/sansation/web_fonts/sansation_italic_macroman/Sansation-Italic-webfont.svg?1452098376#sansationitalic') format("svg");
+  src: url('/css/fonts/Sansation-Italic-webfont.eot');
+  src: url('/css/fonts/Sansation-Italic-webfont.eot?#iefix') format("embedded-opentype"), url('/css/fonts/Sansation-Italic-webfont.woff') format("woff"), url('/css/fonts/Sansation-Italic-webfont.ttf') format("truetype"), url('/css/fonts/Sansation-Italic-webfont.svg#sansationitalic') format("svg");
   font-weight: normal;
   font-style: normal;
 }
