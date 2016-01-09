@@ -1,0 +1,45 @@
+@charset "UTF-8";
+/*
+  配置支持变量
+  ----
+  如果对默认的支持变量设置满意,不需要将相应的变量引入工程
+  //浏览器支持
+  $legacy-support-for-ie: true;
+  $legacy-support-for-ie6: $legacy-support-for-ie;
+  $legacy-support-for-ie7: $legacy-support-for-ie;
+  $legacy-support-for-ie8: $legacy-support-for-ie;
+  $experimental-support-for-mozilla: true;
+  $experimental-support-for-webkit: true;
+
+  //旧版本safari和chrome的渐变功能
+  $support-for-original-webkit-gradients: true;
+
+  //基于webkit内核的opera, 如果不需要支持opera,基于presto引擎的opera在移动设备仍然很流行
+  //如果想要充分支持移动设备,应该仍然保留此项
+  $experimental-support-for-opera: true;
+  $experimental-support-for-microsoft: true;
+  $experimental-support-for-khtml: false;
+  $experimental-support-for-svg: false;
+  $experimental-support-for-pie: false;
+
+  //会导致旧版本的火狐浏览器产生漏洞
+  $legacy-support-for-mozilla: true;
+*/
+/*
+  为最新发布的css属性提供支持
+  使用新属性:
+  @include experimental(sausage, lincolnshire)
+  还可以选择需要支持的浏览器
+  -moz -webkit -o  not -ms -khtml等
+  如果上述屏蔽了对webkit引擎的支持,无论下面是否对webkit支持,都不会对webkit产生作用
+*/
+.your-own-property {
+  -moz-sausage: lincolnshire;
+  -o-sausage: lincolnshire;
+  sausage: lincolnshire;
+}
+
+/*
+  定义最新的css3属性值
+  experimental-value
+*/
