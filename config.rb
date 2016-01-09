@@ -1,10 +1,10 @@
-require 'compass/import-once/activate'
+# require 'compass/import-once/activate'
 # Require any additional compass plugins here.
 # 配置工程所需的插件
 require 'susy'
 
 # Set this to the root of your project when deployed:
-http_path = "/"
+http_path = "/sass-project"
 css_dir = "css"
 sass_dir = "sass"
 images_dir = "img"

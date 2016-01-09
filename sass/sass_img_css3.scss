@@ -1,0 +1,271 @@
+@import "compass";
+@import "partials/variables";
+/*
+  这部分才是compass的核心
+  Compass有一系列的混合宏mixins, 用于完成跨浏览器的css样式
+  Compass可以自动创建images sprites和数据URI
+
+  --
+  内容:
+      CSS特性方面的compass语法
+      compass image-url工具引用图片
+      compass的缓存清除工具
+      多个独立文件自动创建image sprites
+      compass的文本替代
+      compass inline-image 将小图像作为数据的uri嵌入样式表
+      compass css变换
+      compass css过渡
+*/
+
+/*
+  使用compass混合宏轻松实现css3
+  ----
+  1. text-shadow
+     %headline-text-shadow {
+        @include text-shadow(3px, 4px, 0px, darken($color11, 20%))
+     }
+     引用:
+     .headline-hero {
+        @extend %headline-text-shadow
+     }
+     如果不想使用占位符,可以
+     .headline-hero {
+        @include text-shadow; [保持默认值]
+     }
+     默认值可以修改:
+     $default-text-shadow-color:
+     $default-text-shadow-blur:
+     $default-text-shadow-v-offset:
+     $default-text-shadow-h-offset:
+*/
+p.hello {
+  @include text-shadow(1px 1px 2px $color1, 2px 2px 5px $color2);
+}
+/*
+  ----
+  2. border-radius
+  @include border-radius(5px);
+  默认值设置: $default-border-radius
+  四个角分别设置:
+    @include border-top-right-radius()
+    @include border-bottom-right-radius()
+    @include border-bottom-left-radius()
+    @include border-top-left-radius()
+  也可以两个角一起设置:
+    @include border-top-radius();
+    @include border-right-radius();
+    @include border-left-radius();
+    @include border-bottom-radius();
+*/
+.wrapper {
+  width: 5em;
+  text-align: center;
+  border: 2px solid $color1;
+  @include border-radius(5px);
+}
+/*
+  ----
+  3. box-shadow
+  和text-shadow类似
+  默认值:
+    $default-box-shadow-color:    //阴影颜色
+    $default-box-shadow-h-offset: //水平偏量
+    $default-box-shadow-v-offset: //垂直偏量
+    $default-box-shadow-blur:     //模糊值
+    $default-box-shadow-spread:   //扩散值[可选]
+    $default-box-shadow-inset:    //inset值[可选],内阴影
+
+    使用
+    --
+    @include box-shadow([inset],h-offset,v-offset,blur,[spread],color)
+    --
+    多重阴影使用
+    @include box-shadow([set1],[set2])
+*/
+.wrapper {
+  @include box-shadow(1px 1px 2px lighten($color6, 20%));
+}
+/*
+  ----
+  4. 背景渐变
+  线性渐变的语法:
+    @include background(linear-gradient(to bottom, darken($color-pink, 10%) 0px,
+                                        darken($color-pink, 10%) 4px,
+                                        lighten(complement($color-pink), 10%) 4px,
+                                        complement($color-pink) 100%));
+    @include box-shadow(#ccc 0px 3px 10px)
+    ----------------
+    @include background(linear-gradient(to direction, first-color first-color stop,
+                                        second-color second-color stop))
+
+  辐射渐变的语法
+    @include background-image(radial-gradient(100% circle, pink 15%, red 100%))
+
+    -------
+    100% circle 表示辐射圆圈的尺寸
+    接下来参数和线性渐变一样, 表示颜色和停止位置
+
+  组合渐变和图像
+*/
+.wrapper {
+  //@include background(linear-gradient(to bottom, $color1 0px, $color4 100%));
+  @include background(radial-gradient(circle, $color1 15%, $color6 100%));
+}
+/*
+  5. 用compass image-url添加背景图像
+  通常添加背景图像
+  ----
+      background-image: url("../img/amazon-com.svg")
+      这导致需要理清相对路径,
+      但通过image-url,可以轻松地找到相对应地图像
+      background-image: image-url("amazon-com.svg");
+*/
+.img{
+  width: 20em;
+  height: 20em;
+  background-image: image-url("book.png");
+}
+/*
+  6.图像的宽度高度帮助工具
+  ------
+  自动计算图像的高度和宽度
+  image-height()
+  image-width()
+*/
+
+/*
+  7.compass缓存清除功能
+  background-image: url('/sass-project/img/book.png?1349937324');
+  这里的?1349937324即为缓存消除功能
+  关闭缓存消除功能,可以image-url("book.png", false, false)
+  第二个false是关闭消除缓存的功能
+  第一个false是保留url
+*/
+
+/*
+  7. image sprites功能
+  将很多图片集合到一张大图中,然后通过background-position属性移动该图像
+  方法:
+    @import "buy/*.png";  //导入所有buy目录下的图片
+    @include all-buy-sprites; //buy目录下的所有文件都存在sprites下
+    下面例子中为图像设置了高宽,但如果图像之间高宽不同,就会存在问题,
+    这时需要用到sprites的其他功能
+
+    其他功能
+    -------
+    1.为每个html选择器添加高度和宽度
+    ------$buy-sprite-dimensions: true;
+    2.给图像周围添加额外的内边距
+    ------$buy-space: 10px
+    3.布局选项,决定图像在sprites中是横向\纵向\对角\智能布局
+    如果image sprites里包含一系列的水平导航图标时,使用纵向排列, 这样使得图像相互叠加或冲突的几率更小
+    ------$buy-layout: vertical/horizontal/diagonal[最浪费空间]/smart[最节省空间]
+*/
+@import "buy/*.png";
+@include all-buy-sprites;
+//设置单张图片的高度和宽度
+/*$buy-height: buy-sprite-height(amazon-uk);
+$buy-width: buy-sprite-width(amazon-uk);
+[class ^= "buy-"] {
+  display: block;
+  height: $buy-height;
+  width: $buy-width;
+}*/
+/*
+  8. compass文本替代混合宏
+  --
+    1. hide-text混合宏
+    .hide-text {
+      @include hide-text
+    }
+  --
+    2. squish-text 文本压缩混合宏
+    将文本从视觉上隐藏起来,但对文本阅读器仍然是可见的
+    @include squish-text [最适合隐藏文本]
+  --
+    3. 用图像代替文本
+    @include replace-text-with-dimensions()
+    这个混合宏的好处是会根据图像的尺寸自动设置元素的高度和宽度
+
+*/
+.ir {
+  @include hide-text;
+  /*@include squish-text;*/
+  /*@include replace-text-with-dimensions('buy/amazon-uk.png');*/
+}
+/*
+  9. 为图像创建数据URI
+  SVG: 无论在哪种设备下,图像都可以清晰显示,因为SVG是可缩放矢量图像
+  SVG基于em, 但使用SVG不能把图像放在一起,像image sprites一样
+  解决方法: 将图像转化为uri,直接导入css
+  即:
+    background-image: inline-image("svg/amazon-us.svg")
+*/
+[class ^= "buy-"] {
+  display: block;
+  min-height: 2.5em;
+  background-position: 50% 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.buy-amazon-uk {
+  background-image: inline-image("svg/amazon-uk.svg");
+  //没有SVG的备选方法
+  .no-svg & {
+    background-image: image-url("buy/amazon-uk.png");
+  }
+}
+/*
+  11. CSS变形方法
+  compass可以定义css3任意的变形功能
+
+  --
+  css transform 2D语法和compass 2D变形函数的语法一致
+
+  给单一元素同时添加多种变化
+  --
+  @include simple-transform(scale, translate-x, translate-y, skew-x, skew-y, origin-x, origin-y)
+*/
+
+/*
+  12. CSS过滤器
+  Compass有一种可以为CSS过滤器生成带有各种浏览器前缀的属性
+  @include filter(drop-shadow(...))
+
+  补充: CSS过滤器
+  Filters运用在图像上实现一些特效
+  用法:
+      elem {
+        filter: none | <filter-function> [<filter-function>]*
+      }
+
+      filter可选值:
+          灰度:     grayscale
+          棕色:     sepia
+          饱和度:   saturate
+          色相旋转: hue-rotate
+          反色:     invert
+          透明度:   opacity
+          亮度:     brightness
+          对比度:   contrast
+          模糊:     blur
+          阴影:     drop-shadow
+*/
+.normal {
+  @include filter(grayscale(1));
+  @include filter(sepia(0));
+  @include filter(saturate(3));
+  @include filter(hue-rotate(20deg));
+  @include filter(invert(0.2));
+  @include filter(opacity(0.8));
+  @include filter(brightness(1.5));
+  @include filter(contrast(1.2));
+  @include filter(blur(20px));
+  @include filter(drop-shadow(5px 5px 5px lighten($color4, 25%)));
+  @include single-transition(all 0.3 ease 0);
+}
+/*
+  13. CSS过渡
+  Compass混合宏: 过渡混合宏
+  @include single-transition(all, 0.3, ease, 0);
+*/
