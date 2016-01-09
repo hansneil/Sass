@@ -1,0 +1,162 @@
+@import "compass";
+/*
+  sass编程逻辑
+  --
+
+  --
+  sass的数学运算
+
+  1.加减乘除
+  示例:
+      .addition {
+        width: 20% + 80%  ==> width: 100%
+      }
+      .subtraction {
+        width: 80% - 20% ==> width: 60%
+      }
+      .multiplication {
+        width: 20 * 80px ==> width: 1600px
+        //注意: 当一个单位同时声明两个值时会出现错误, 即20px * 80px是错误的
+      }
+      .division {
+        width: 80% / 20; ==> width: 4%
+        //注意: 80% / 20% 是没有意义的
+      }
+
+  2.使用变量进行计算
+  $main-width: 60%;
+  $sidebar-width: 40%;
+  $full-width: $main-width + $sidebar-width;
+
+  .main {
+    width: $full-width;
+  }
+*/
+
+$main-width: 60%;
+$sidebar-width: 40%;
+$full-width: $main-width + $sidebar-width;
+
+.main {
+  width: $full-width;
+}
+
+/*
+  --
+  sass的控制命令
+
+  1. @if 和 @else if 控制命令
+  示例:
+      $color-theme: orange;
+      @if $color-theme == pink {
+        $color-brand: pink;
+      }
+      @else if $color-theme == orange {
+        $color-brand: orange;
+      }
+*/
+$color-theme: orange;
+$color-brand: pink;
+@if $color-theme == pink {
+  $color-brand: pink;
+}
+@else if $color-theme == orange {
+  $color-brand: orange;
+}
+.sidebar {
+  color: $color-theme;
+}
+.brand {
+  color: $color-brand;
+}
+/*
+  --
+  sass的控制命令
+
+  2. @for循环
+  示例:
+      @for $i from 1 through 4 {
+        .buy_# {$i} {
+          background-image: image-url("svg/buy_# {$i}.svg");
+          .no-svg & {
+            background-image: image-url("png/buy_# {$i}.png");
+          }
+        }
+      }
+
+      --
+      from to 和 from through
+      from 1 through 4: 1,2,3,4
+      from 1 to 4:      1,2,3
+
+      --
+      插入值:
+          # {$i} -- 插入值,假设$1 = 1,
+          则有product_no# {$i} ==> product_no1
+*/
+@for $i from 1 to 4 {
+  .buy_#{$i} {
+    background-image: image-url("svg/buy_#{$i}.svg");
+    .no-svg & {
+      background-image: image-url("png/buy_#{$i}.png");
+    }
+  }
+}
+/*
+  --
+  sass的控制命令
+
+  3. @each循环
+  @each在迭代一系列的项时十分有用
+  先定义一个新的list:
+  $colors-list: $color-theme $theme-adjust-complement2 $theme-complement
+                $theme-adjust $theme-adjust-complement $theme-shade
+                $theme-tint $theme-desaturate $theme-adjust20 $theme-adjust40
+  @each 在list中进行遍历
+  --
+  @each $current-color in $colors-list {
+    $i: index($colors-list, $current-color);
+    .chapter-summary {
+      @include box-shadow(#ccc 1px 1px 2px);
+      &:nth-child(# {$i}){
+        background-color: darken(complement(adjust-hue($current-color, ($i * 10 %))), 10%);
+      }
+    }
+  }
+*/
+
+/*
+  给数值去除或添加单位
+  ----
+  带单位的变量
+  $variable-with-unit: 0%;
+  去掉单位的变量
+  $variable-without-unit: ($variable * 0 + 1);
+*/
+$variable-with-unit: 0%;
+$variable-without-unit: ($variable-with-unit * 0 + 1);
+.main {
+  width: $variable-without-unit;
+}
+
+/*
+  在sass中实现函数
+  ----
+  混合宏和函数:
+  混合宏: 生成很多属性-值的CSS代码工具
+  函数: 能够生成可以应用在其他任何地方的数值的工具
+  @function bb-opos($bb-flow) {
+    @if $bb-flow == right {
+      @return left;
+    }
+    @else {
+      @return right;
+    }
+  }
+*/
+
+/*
+  使用@debug命令 @warn命令
+  两者类似,打印调试信息,但@warn的信息可以通过conig.rb关闭
+*/
+@debug $variable-with-unit;
